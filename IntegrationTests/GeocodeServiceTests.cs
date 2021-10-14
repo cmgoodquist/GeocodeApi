@@ -14,16 +14,17 @@ namespace IntegrationTests
     {
         public static IEnumerable<object[]> ValidAddressData()
         {
-            yield return new[] { "street", "city", "state", "zip" };
-            yield return new[] { "street", "city", "state", null };
-            yield return new[] { "street", "city", "state", string.Empty };
+            yield return new[] { "street", "city", "st", "zip" };
+            yield return new[] { "street", "city", "st", null };
+            yield return new[] { "street", "city", "st", string.Empty };
         }
 
         public static IEnumerable<object[]> InvalidAddressData()
         {
-            yield return new[] { null, "city", "state", "zip" };
-            yield return new[] { "street", null, "state", "zip" };
+            yield return new[] { null, "city", "st", "zip" };
+            yield return new[] { "street", null, "st", "zip" };
             yield return new[] { "street", "city", null, "zip" };
+            yield return new[] { "street", "city", "obviouslyNotAStateCode", "zip" };
         }
 
         [Theory]
@@ -49,7 +50,7 @@ namespace IntegrationTests
         [MemberData(nameof(InvalidAddressData))]
         public async Task GeocodeAddress_ThrowsInvalidAddressException_WhenCalledWithInvalidAddress(string street, string city, string state, string zip)
         {
-            await Assert.ThrowsAsync<Exception>(async () =>
+            await Assert.ThrowsAsync<InvalidAddressException>(async () =>
             {
                 //Arrange
                 var expectedContent = nameof(GeocodeAddress_ThrowsInvalidAddressException_WhenCalledWithInvalidAddress);
