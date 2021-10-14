@@ -1,7 +1,10 @@
-﻿namespace GeocodeApi.Geocode
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace GeocodeApi.Geocode
 {
     public interface IGeocodeService
     {
-        void Execute();
+        Task<HttpResponseMessage> GeocodeAddress(string street, string city, string stateCode, string zipCode);
     }
 }
