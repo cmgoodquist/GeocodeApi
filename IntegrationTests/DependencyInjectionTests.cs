@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace Tests
+namespace IntegrationTests
 {
     public class DependencyInjectionTests
     {
