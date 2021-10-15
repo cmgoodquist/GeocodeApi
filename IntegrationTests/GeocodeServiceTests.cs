@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -54,7 +53,7 @@ namespace IntegrationTests
             {
                 //Arrange
                 var expectedContent = nameof(GeocodeAddress_ThrowsInvalidAddressException_WhenCalledWithInvalidAddress);
-                using(var client = SetUpStub(expectedContent))
+                using (var client = SetUpStub(expectedContent))
                 {
                     var service = new GeocodeService(client);
 

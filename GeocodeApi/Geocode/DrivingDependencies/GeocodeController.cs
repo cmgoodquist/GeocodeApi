@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Threading.Tasks;
 
 namespace GeocodeApi.Geocode.DrivingDependencies
 {
@@ -11,10 +11,15 @@ namespace GeocodeApi.Geocode.DrivingDependencies
 
         public GeocodeController(IGeocodeService service) => _service = service;
 
-        [HttpGet]
-        public IActionResult GetGeocode()
+        [HttpPost]
+        public async Task<IActionResult> GeocodeAddress(GeocodeRequest geocodeRequest)
         {
-            throw new NotImplementedException();
+            var response = await _service.GeocodeAddress(geocodeRequest.Street, geocodeRequest.City, geocodeRequest.StateCode, geocodeRequest.ZipCode);
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(response.StatusCode);
+
+            var content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
         }
     }
 }
