@@ -1,8 +1,6 @@
 ﻿using GeocodeApi.Geocode.DrivenDependencies;
 using IntegrationTests.TestHelpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,34 +10,8 @@ namespace IntegrationTests.Geocode.DrivenDependencies
 {
     public class GeocodeAddressShould
     {
-        public static IEnumerable<object[]> ValidAddressData()
-        {
-            var random = new RandomValueGenerator();
-            var validZipCodeValues = new[] { random.String(), string.Empty, null, "  " };
-            foreach(var zipCode in validZipCodeValues)
-                yield return new[] { random.String(), random.String(), random.String(2), zipCode };
-        }
-
-        public static IEnumerable<object[]> InvalidAddressData()
-        {
-            var random = new RandomValueGenerator();
-            var validInputs = new [] { random.String(), random.String(), random.String(2), random.String() };
-            var invalidInputs = new[] { null, string.Empty, "  " };
-            foreach(var invalidInput in invalidInputs)
-            {
-                for(var i = 0; i < 3; i++)
-                {
-                    var invalidInputList = validInputs.ToList();
-                    invalidInputList[i] = invalidInput;
-                    yield return invalidInputList.ToArray();
-                }
-
-            }
-            yield return new[] { random.String(), random.String(), random.String(), random.String() };
-        }
-
         [Theory]
-        [MemberData(nameof(ValidAddressData))]
+        [MemberData(nameof(GeocodeAddressTheoryData.ValidAddressData), MemberType = typeof(GeocodeAddressTheoryData))]
         public async Task ReturnExpectedContent_WhenCalledWithValidAddress(string street, string city, string state, string zip)
         {
             //Arrange
@@ -58,7 +30,7 @@ namespace IntegrationTests.Geocode.DrivenDependencies
         }
 
         [Theory]
-        [MemberData(nameof(InvalidAddressData))]
+        [MemberData(nameof(GeocodeAddressTheoryData.InvalidAddressData), MemberType = typeof(GeocodeAddressTheoryData))]
         public async Task ThrowInvalidAddressException_WhenCalledWithInvalidAddress(string street, string city, string state, string zip)
         {
             await Assert.ThrowsAsync<InvalidAddressException>(async () =>
