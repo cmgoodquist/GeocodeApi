@@ -64,7 +64,7 @@ namespace IntegrationTests.Geocode.DrivingDependencies
             Street = _random.String(),
             City = _random.String(),
             StateCode = _random.String(2),
-            ZipCode = _random.String()
+            ZipCode = _random.String(5)
         };
 
     }

@@ -11,7 +11,7 @@ namespace GeocodeApi.Geocode.DrivenDependencies
 
         public async Task<HttpResponseMessage> GeocodeAddress(string street, string city, string stateCode, string zipCode)
         {
-            if (string.IsNullOrWhiteSpace(street) || string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(stateCode) || stateCode.Length != 2)
+            if (string.IsNullOrWhiteSpace(street) || string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(stateCode) || stateCode.Length != 2 || (!string.IsNullOrWhiteSpace(zipCode) && zipCode.Length != 5 && zipCode.Length != 9))
                 throw new InvalidAddressException();
 
             //Character substitution expected by target API.
