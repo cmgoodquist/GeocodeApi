@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace GeocodeApi.AppStart
 {
@@ -24,7 +25,10 @@ namespace GeocodeApi.AppStart
             services.AddSwaggerGen();
             services.AddCors();
 
-            services.AddScoped<IGeocodeService, GeocodeService>();
+            services.AddHttpClient<IGeocodeService, GeocodeService>(options =>
+            {
+                options.BaseAddress = new Uri(Configuration["GeocodeAddressUrl"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
