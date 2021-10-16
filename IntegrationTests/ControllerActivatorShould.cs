@@ -12,7 +12,7 @@ using Xunit;
 
 namespace IntegrationTests
 {
-    public class DependencyInjectionTests
+    public class ControllerActivatorShould
     {
         public static IEnumerable<object[]> ControllerTypes()
         {
@@ -24,7 +24,7 @@ namespace IntegrationTests
 
         [Theory]
         [MemberData(nameof(ControllerTypes))]
-        public void ControllerDependencies_ResolveCorrectly_WhenControllerInstantiated(Type controllerType)
+        public void ResolveDependenciesCorrectly(Type controllerType)
         {
             //Arrange
             var host = Program.CreateHostBuilder(new string[] { }).Build();

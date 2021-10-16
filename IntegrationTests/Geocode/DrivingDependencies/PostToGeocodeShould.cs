@@ -5,12 +5,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests
+namespace IntegrationTests.Geocode.DrivingDependencies
 {
-    public class GeocodeControllerTests
+    public class PostToGeocodeShould
     {
         [Fact]
-        public async Task GeocodeAddress_ReturnsBadRequest_WhenRequestFails()
+        public async Task ReturnBadRequest_WhenRequestFails()
         {
             //Arrange
             var expectedResponse = new HttpResponseMessage()
@@ -37,7 +37,7 @@ namespace IntegrationTests
         }
 
         [Fact]
-        public async Task GeocodeAddress_ReturnsExpectedContent_WhenRequestSucceeds()
+        public async Task ReturnExpectedContent_WhenRequestSucceeds()
         {
             //Arrange
             var expectedContent = "arbitrary expectation";

@@ -7,9 +7,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests
+namespace IntegrationTests.Geocode.DrivenDependencies
 {
-    public class GeocodeServiceTests
+    public class GeocodeAddressShould
     {
         public static IEnumerable<object[]> ValidAddressData()
         {
@@ -28,10 +28,10 @@ namespace IntegrationTests
 
         [Theory]
         [MemberData(nameof(ValidAddressData))]
-        public async Task GeocodeAddress_ReturnsExpectedContent_WhenCalledWithValidAddress(string street, string city, string state, string zip)
+        public async Task ReturnExpectedContent_WhenCalledWithValidAddress(string street, string city, string state, string zip)
         {
             //Arrange
-            var expectedContent = nameof(GeocodeAddress_ReturnsExpectedContent_WhenCalledWithValidAddress);
+            var expectedContent = nameof(ReturnExpectedContent_WhenCalledWithValidAddress);
             using (var client = SetUpStub(expectedContent))
             {
                 var service = new GeocodeService(client);
@@ -47,12 +47,12 @@ namespace IntegrationTests
 
         [Theory]
         [MemberData(nameof(InvalidAddressData))]
-        public async Task GeocodeAddress_ThrowsInvalidAddressException_WhenCalledWithInvalidAddress(string street, string city, string state, string zip)
+        public async Task ThrowInvalidAddressException_WhenCalledWithInvalidAddress(string street, string city, string state, string zip)
         {
             await Assert.ThrowsAsync<InvalidAddressException>(async () =>
             {
                 //Arrange
-                var expectedContent = nameof(GeocodeAddress_ThrowsInvalidAddressException_WhenCalledWithInvalidAddress);
+                var expectedContent = nameof(ThrowInvalidAddressException_WhenCalledWithInvalidAddress);
                 using (var client = SetUpStub(expectedContent))
                 {
                     var service = new GeocodeService(client);
