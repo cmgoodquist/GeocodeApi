@@ -10,7 +10,7 @@ namespace IntegrationTests.Geocode.DrivenDependencies
         {
             var data = new TheoryData<string, string, string, string>();
             var random = new RandomValueGenerator();
-            var validZipCodeValues = new[] { random.String(), string.Empty, null, "  " };
+            var validZipCodeValues = new[] { random.String(5), random.String(9), string.Empty, null, "  " };
             foreach (var zipCode in validZipCodeValues)
                 data.Add(random.String(), random.String(), random.String(2), zipCode);
 
@@ -21,7 +21,7 @@ namespace IntegrationTests.Geocode.DrivenDependencies
         {
             var data = new TheoryData<string, string, string, string>();
             var random = new RandomValueGenerator();
-            var validInputs = new[] { random.String(), random.String(), random.String(2), random.String() };
+            var validInputs = new[] { random.String(), random.String(), random.String(2), random.String(6) };
             var invalidInputs = new[] { null, string.Empty, "  " };
             //Test every bad value for every relevant input.
             foreach (var invalidInput in invalidInputs)
@@ -35,6 +35,8 @@ namespace IntegrationTests.Geocode.DrivenDependencies
             }
             //Test additional (length) constraint on state code input.
             data.Add(random.String(), random.String(), random.String(), random.String());
+            //Test additional (length) constraint on zip code input.
+            data.Add(random.String(), random.String(), random.String(2), random.String());
             return data;
         }
     }
