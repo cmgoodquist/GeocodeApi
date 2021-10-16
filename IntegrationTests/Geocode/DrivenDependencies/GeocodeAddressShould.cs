@@ -2,6 +2,7 @@
 using IntegrationTests.TestHelpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,17 +14,28 @@ namespace IntegrationTests.Geocode.DrivenDependencies
     {
         public static IEnumerable<object[]> ValidAddressData()
         {
-            yield return new[] { "street", "city", "st", "zip" };
-            yield return new[] { "street", "city", "st", null };
-            yield return new[] { "street", "city", "st", string.Empty };
+            var random = new RandomValueGenerator();
+            var validZipCodeValues = new[] { random.String(), string.Empty, null, "  " };
+            foreach(var zipCode in validZipCodeValues)
+                yield return new[] { random.String(), random.String(), random.String(2), zipCode };
         }
 
         public static IEnumerable<object[]> InvalidAddressData()
         {
-            yield return new[] { null, "city", "st", "zip" };
-            yield return new[] { "street", null, "st", "zip" };
-            yield return new[] { "street", "city", null, "zip" };
-            yield return new[] { "street", "city", "obviouslyNotAStateCode", "zip" };
+            var random = new RandomValueGenerator();
+            var validInputs = new [] { random.String(), random.String(), random.String(2), random.String() };
+            var invalidInputs = new[] { null, string.Empty, "  " };
+            foreach(var invalidInput in invalidInputs)
+            {
+                for(var i = 0; i < 3; i++)
+                {
+                    var invalidInputList = validInputs.ToList();
+                    invalidInputList[i] = invalidInput;
+                    yield return invalidInputList.ToArray();
+                }
+
+            }
+            yield return new[] { random.String(), random.String(), random.String(), random.String() };
         }
 
         [Theory]
