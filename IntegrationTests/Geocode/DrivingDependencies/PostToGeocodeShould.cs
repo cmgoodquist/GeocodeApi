@@ -9,8 +9,12 @@ namespace IntegrationTests.Geocode.DrivingDependencies
 {
     public class PostToGeocodeShould
     {
+        private readonly RandomValueGenerator _random;
+
+        public PostToGeocodeShould() => _random = new RandomValueGenerator();
+
         [Fact]
-        public async Task ReturnBadRequest_WhenRequestFails()
+        public async Task ReturnBadRequest_WhenRequestToExternalApiFails()
         {
             //Arrange
             var expectedResponse = new HttpResponseMessage()
@@ -20,13 +24,7 @@ namespace IntegrationTests.Geocode.DrivingDependencies
             using (var server = new StubTestServer(expectedResponse))
             {
                 var client = server.CreateClient();
-                var geocodeRequest = new GeocodeRequest()
-                {
-                    Street = "street",
-                    City = "city",
-                    StateCode = "st",
-                    ZipCode = "zip"
-                };
+                var geocodeRequest = BuildRandomGeocodeRequest();
 
                 //Act
                 var response = await client.PostAsJsonAsync("api/v1/geocode", geocodeRequest);
@@ -37,10 +35,10 @@ namespace IntegrationTests.Geocode.DrivingDependencies
         }
 
         [Fact]
-        public async Task ReturnExpectedContent_WhenRequestSucceeds()
+        public async Task ReturnExpectedContent_WhenRequestToExternalApiSucceeds()
         {
             //Arrange
-            var expectedContent = "arbitrary expectation";
+            var expectedContent = _random.String();
             var expectedResponse = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
@@ -49,13 +47,7 @@ namespace IntegrationTests.Geocode.DrivingDependencies
             using (var server = new StubTestServer(expectedResponse))
             {
                 var client = server.CreateClient();
-                var geocodeRequest = new GeocodeRequest()
-                {
-                    Street = "street",
-                    City = "city",
-                    StateCode = "st",
-                    ZipCode = "zip"
-                };
+                var geocodeRequest = BuildRandomGeocodeRequest();
 
                 //Act
                 var response = await client.PostAsJsonAsync("api/v1/geocode", geocodeRequest);
@@ -66,6 +58,14 @@ namespace IntegrationTests.Geocode.DrivingDependencies
                 Assert.Equal(expectedContent, actualContent);
             }
         }
+
+        private GeocodeRequest BuildRandomGeocodeRequest() => new GeocodeRequest()
+        {
+            Street = _random.String(),
+            City = _random.String(),
+            StateCode = _random.String(2),
+            ZipCode = _random.String()
+        };
 
     }
 }
